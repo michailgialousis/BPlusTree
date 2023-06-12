@@ -1,0 +1,196 @@
+<html>
+<head>
+<title>Main.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6897bb;}
+.s3 { color: #808080;}
+.s4 { color: #6a8759;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java.io.File</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.io.FileNotFoundException</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.ArrayList</span><span class="s0">;</span>
+<span class="s0">import </span><span class="s1">java.util.Scanner</span><span class="s0">;</span>
+
+<span class="s0">public class </span><span class="s1">Main {</span>
+    <span class="s0">public static </span><span class="s1">BTree&lt;String</span><span class="s0">, </span><span class="s1">Finder&gt; btree = </span><span class="s0">new </span><span class="s1">BTree&lt;&gt;(</span><span class="s2">7</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s0">public static float </span><span class="s1">comparisons</span><span class="s0">;</span>
+    <span class="s0">public static float </span><span class="s1">nodeAccesses</span><span class="s0">;</span>
+
+    <span class="s0">public static void </span><span class="s1">main(String[] args) {</span>
+
+        <span class="s0">int </span><span class="s1">choice</span><span class="s0">;</span>
+        <span class="s1">String fileName</span><span class="s0">;</span>
+        <span class="s1">String word</span><span class="s0">;</span>
+        <span class="s1">Scanner scanner = </span><span class="s0">new </span><span class="s1">Scanner(System.in)</span><span class="s0">;</span>
+
+        <span class="s0">do </span><span class="s1">{</span>
+            <span class="s3">//we get the user's choice and based on that we proceed to the switch case</span>
+            <span class="s1">choice = menu()</span><span class="s0">;</span>
+            <span class="s0">switch </span><span class="s1">(choice) {</span>
+                <span class="s0">case </span><span class="s2">1 </span><span class="s1">-&gt; {</span>
+                    <span class="s3">//the user inserts the files he wishes into our structure</span>
+                    <span class="s1">System.out.print(</span><span class="s4">&quot;Enter the name of the file you want to insert : &quot;</span><span class="s1">)</span><span class="s0">;</span>
+                    <span class="s1">fileName = scanner.next()</span><span class="s0">;</span>
+                    <span class="s1">insertWords(fileName</span><span class="s0">, </span><span class="s1">btree)</span><span class="s0">;</span>
+                <span class="s1">}</span>
+                <span class="s0">case </span><span class="s2">2 </span><span class="s1">-&gt; {</span>
+                    <span class="s1">System.out.print(</span><span class="s4">&quot;Enter the word you want to search :&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                    <span class="s1">word = scanner.next()</span><span class="s0">;</span>
+                    <span class="s1">searchForWordCustomSearch(word</span><span class="s0">, </span><span class="s1">btree)</span><span class="s0">;</span>
+                <span class="s1">}</span>
+
+                <span class="s0">case </span><span class="s2">3 </span><span class="s1">-&gt;</span>
+                        <span class="s1">makeSearches()</span><span class="s0">;</span>
+                <span class="s0">case </span><span class="s2">0 </span><span class="s1">-&gt;</span>
+                        <span class="s1">System.out.println(</span><span class="s4">&quot;Exiting...&quot;</span><span class="s1">)</span><span class="s0">;</span>
+                <span class="s0">default </span><span class="s1">-&gt;</span>
+                        <span class="s1">System.out.println(</span><span class="s4">&quot;</span><span class="s0">\n</span><span class="s4">Invalid choice. Please try again.&quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+            <span class="s1">}</span>
+            <span class="s1">System.out.println()</span><span class="s0">;</span>
+
+        <span class="s1">} </span><span class="s0">while </span><span class="s1">(choice != </span><span class="s2">0</span><span class="s1">)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public static int </span><span class="s1">menu() {</span>
+        <span class="s1">Scanner scanner = </span><span class="s0">new </span><span class="s1">Scanner(System.in)</span><span class="s0">;</span>
+
+        <span class="s1">System.out.println(</span><span class="s4">&quot;Menu:&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s4">&quot;1. Option 1 : Enter a txt file name. &quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s4">&quot;2. Option 2 : Search a word.&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s4">&quot;3. Option 3 : Do searches&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.println(</span><span class="s4">&quot;0. Exit&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">System.out.print(</span><span class="s4">&quot;Enter your choice: &quot;</span><span class="s1">)</span><span class="s0">;</span>
+
+        <span class="s0">return </span><span class="s1">scanner.nextInt()</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+
+    <span class="s0">public static </span><span class="s1">String[] extractWordsFromFile(String fileName) {</span>
+        <span class="s1">ArrayList&lt;String&gt; wordsList = </span><span class="s0">new </span><span class="s1">ArrayList&lt;&gt;()</span><span class="s0">;</span>
+
+        <span class="s0">try </span><span class="s1">{</span>
+            <span class="s1">File file = </span><span class="s0">new </span><span class="s1">File(fileName)</span><span class="s0">;</span>
+            <span class="s1">Scanner scanner = </span><span class="s0">new </span><span class="s1">Scanner(file)</span><span class="s0">;</span>
+
+            <span class="s0">while </span><span class="s1">(scanner.hasNext()) {</span>
+                <span class="s1">String word = scanner.next()</span><span class="s0">;</span>
+                <span class="s1">wordsList.add(word)</span><span class="s0">;</span>
+            <span class="s1">}</span>
+            <span class="s1">scanner.close()</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">catch </span><span class="s1">(FileNotFoundException e) {</span>
+            <span class="s1">e.printStackTrace()</span><span class="s0">;</span>
+            <span class="s0">return new </span><span class="s1">String[</span><span class="s2">0</span><span class="s1">]</span><span class="s0">;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">String[] words = </span><span class="s0">new </span><span class="s1">String[wordsList.size()]</span><span class="s0">;</span>
+        <span class="s1">words = wordsList.toArray(words)</span><span class="s0">;</span>
+        <span class="s0">return </span><span class="s1">words</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public static </span><span class="s1">String[] insertWords(String fileName</span><span class="s0">, </span><span class="s1">BTree&lt;String</span><span class="s0">, </span><span class="s1">Finder&gt; btree) {</span>
+        <span class="s1">String[] words = extractWordsFromFile(fileName)</span><span class="s0">;</span>
+        <span class="s0">int </span><span class="s1">position = </span><span class="s2">0</span><span class="s0">;</span>
+
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; words.length</span><span class="s0">; </span><span class="s1">i++) {</span>
+
+            <span class="s1">Finder finder = btree.search(words[i])</span><span class="s0">;</span>
+
+            <span class="s0">if </span><span class="s1">(finder == </span><span class="s0">null</span><span class="s1">) {                         </span><span class="s3">//if word doesn't exist make a new linked list</span>
+                <span class="s1">finder = </span><span class="s0">new </span><span class="s1">Finder()</span><span class="s0">;</span>
+                <span class="s1">finder.add(fileName</span><span class="s0">, </span><span class="s1">position)</span><span class="s0">;</span>
+                <span class="s1">btree.insert(words[i]</span><span class="s0">, </span><span class="s1">finder)</span><span class="s0">;</span>
+            <span class="s1">} </span><span class="s0">else                                        </span><span class="s3">// else just add it</span>
+                <span class="s1">finder.add(fileName</span><span class="s0">, </span><span class="s1">position)</span><span class="s0">;</span>
+
+            <span class="s1">position += words[i].length() + </span><span class="s2">1</span><span class="s0">;            </span><span class="s3">//length of the word + space character</span>
+
+        <span class="s1">}</span>
+
+        <span class="s0">return </span><span class="s1">extractWordsFromFile(fileName)</span><span class="s0">;</span>
+
+
+    <span class="s1">}</span>
+
+
+    <span class="s3">// searchForWordCustomSearch is for the second option where the fileName and position</span>
+    <span class="s3">// are printed as well as the nodes accessed and the comparisons made with the keys of the tree</span>
+    <span class="s0">public static void </span><span class="s1">searchForWordCustomSearch(String word</span><span class="s0">, </span><span class="s1">BTree&lt;String</span><span class="s0">, </span><span class="s1">Finder&gt; btree) {</span>
+        <span class="s1">BTree.comparisons = </span><span class="s2">0</span><span class="s0">;</span>
+        <span class="s1">BTree.nodeAccesses = </span><span class="s2">0</span><span class="s0">;</span>
+
+        <span class="s1">Finder finder = btree.search(word)</span><span class="s0">;</span>
+        <span class="s0">if </span><span class="s1">(finder == </span><span class="s0">null</span><span class="s1">) {</span>
+            <span class="s1">System.out.println(</span><span class="s4">&quot;This word doesn't exist.&quot;</span><span class="s1">)</span><span class="s0">;</span>
+        <span class="s1">} </span><span class="s0">else </span><span class="s1">{</span>
+            <span class="s1">finder.display()</span><span class="s0">;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">System.out.println(</span><span class="s4">&quot;Nodes accessed : &quot; </span><span class="s1">+ BTree.nodeAccesses + </span><span class="s4">&quot;, Comparisons made : &quot; </span><span class="s1">+ BTree.comparisons)</span><span class="s0">;</span>
+
+    <span class="s1">}</span>
+
+
+    <span class="s3">// searchForWord100Searches doesn't print anything so the console doesn't get cluttered</span>
+    <span class="s3">// also there is no need for and if else statement because we know that the 100 words that are</span>
+    <span class="s3">// going to be searched, do exist</span>
+    <span class="s0">public static void </span><span class="s1">searchForWord100Searches(String word</span><span class="s0">, </span><span class="s1">BTree&lt;String</span><span class="s0">, </span><span class="s1">Finder&gt; btree) {</span>
+        <span class="s1">BTree.comparisons = </span><span class="s2">0</span><span class="s0">;</span>
+        <span class="s1">BTree.nodeAccesses = </span><span class="s2">0</span><span class="s0">;</span>
+
+        <span class="s1">btree.search(word)</span><span class="s0">;</span>
+    <span class="s1">}</span>
+
+    <span class="s0">public static void </span><span class="s1">makeSearches() {</span>
+
+        <span class="s0">int</span><span class="s1">[] order = {</span><span class="s2">10</span><span class="s0">, </span><span class="s2">20</span><span class="s1">}</span><span class="s0">;</span>
+        <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">j = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">j &lt; order.length</span><span class="s0">; </span><span class="s1">j++) {</span>
+            <span class="s3">//initialization</span>
+            <span class="s1">comparisons = </span><span class="s2">0</span><span class="s0">;</span>
+            <span class="s1">nodeAccesses = </span><span class="s2">0</span><span class="s0">;</span>
+
+            <span class="s1">BTree&lt;String</span><span class="s0">, </span><span class="s1">Finder&gt; btreeCustomOrder = </span><span class="s0">new </span><span class="s1">BTree&lt;&gt;(order[j])</span><span class="s0">;</span>
+
+            <span class="s1">String[] words1 = insertWords(</span><span class="s4">&quot;1.txt&quot;</span><span class="s0">, </span><span class="s1">btreeCustomOrder)</span><span class="s0">;</span>
+            <span class="s1">String[] words2 = insertWords(</span><span class="s4">&quot;2.txt&quot;</span><span class="s0">, </span><span class="s1">btreeCustomOrder)</span><span class="s0">;</span>
+
+
+            <span class="s1">String[] wordsFromTxt1 = </span><span class="s0">new </span><span class="s1">String[</span><span class="s2">50</span><span class="s1">]</span><span class="s0">;</span>
+            <span class="s1">String[] wordsFromTxt2 = </span><span class="s0">new </span><span class="s1">String[</span><span class="s2">50</span><span class="s1">]</span><span class="s0">;</span>
+
+
+            <span class="s3">//taking 50 random words from each file to make the searches</span>
+            <span class="s0">for </span><span class="s1">(</span><span class="s0">int </span><span class="s1">i = </span><span class="s2">0</span><span class="s0">; </span><span class="s1">i &lt; </span><span class="s2">50</span><span class="s0">; </span><span class="s1">i++) {</span>
+                <span class="s0">int </span><span class="s1">randomIndex1 = RandomNumberGenerator.generateRandomNumber(words1.length)</span><span class="s0">;</span>
+                <span class="s0">int </span><span class="s1">randomIndex2 = RandomNumberGenerator.generateRandomNumber(words2.length)</span><span class="s0">;</span>
+
+                <span class="s1">wordsFromTxt1[i] = words1[randomIndex1]</span><span class="s0">;</span>
+                <span class="s1">wordsFromTxt2[i] = words2[randomIndex2]</span><span class="s0">;</span>
+
+                <span class="s1">searchForWord100Searches(wordsFromTxt1[i]</span><span class="s0">, </span><span class="s1">btreeCustomOrder)</span><span class="s0">;</span>
+                <span class="s1">comparisons += BTree.comparisons</span><span class="s0">;</span>
+                <span class="s1">nodeAccesses += BTree.nodeAccesses</span><span class="s0">;</span>
+
+                <span class="s1">searchForWord100Searches(wordsFromTxt2[i]</span><span class="s0">, </span><span class="s1">btreeCustomOrder)</span><span class="s0">;</span>
+                <span class="s1">comparisons += BTree.comparisons</span><span class="s0">;</span>
+                <span class="s1">nodeAccesses += BTree.nodeAccesses</span><span class="s0">;</span>
+            <span class="s1">}</span>
+
+            <span class="s1">System.out.println(</span><span class="s4">&quot;For order = &quot; </span><span class="s1">+ (order[j] + </span><span class="s2">1</span><span class="s1">) + </span><span class="s4">&quot; average comparisons made : &quot; </span><span class="s1">+ (comparisons / </span><span class="s2">100</span><span class="s1">))</span><span class="s0">;</span>
+            <span class="s1">System.out.println(</span><span class="s4">&quot;For order = &quot; </span><span class="s1">+ (order[j] + </span><span class="s2">1</span><span class="s1">) + </span><span class="s4">&quot; average node accesses made : &quot; </span><span class="s1">+ (nodeAccesses / </span><span class="s2">100</span><span class="s1">))</span><span class="s0">;</span>
+
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+<span class="s1">}</span></pre>
+</body>
+</html>
